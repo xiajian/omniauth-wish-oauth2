@@ -1,1 +1,1 @@
-require "omniauth/strategies/Wish"
+require "omniauth/strategies/wish"
