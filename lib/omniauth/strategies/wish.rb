@@ -1,18 +1,18 @@
-require "omniauth-oauth2"
+require 'omniauth-oauth2'
 
 module OmniAuth
   module Strategies
-    class Weixin < OmniAuth::Strategies::OAuth2
-      option :name, "weixin"
+    class Wish < OmniAuth::Strategies::OAuth2
+      option :name, 'wish'
 
       option :client_options, {
-        site:          "https://api.weixin.qq.com",
-        authorize_url: "https://open.weixin.qq.com/connect/qrconnect#wechat_redirect",
-        token_url:     "/sns/oauth2/access_token",
+        site:          'https://merchant.wish.com/',
+        authorize_url: 'https://merchant.wish.com/oauth/authorize',
+        token_url:     'api/v2/oauth/access_token',
         token_method:  :get
       }
 
-      option :authorize_params, {scope: "snsapi_login"}
+      option :authorize_params, {scope: 'snsapi_login'}
 
       option :token_params, {parse: :json}
 
@@ -22,13 +22,6 @@ module OmniAuth
 
       info do
         {
-          openid:     raw_info["openid"],
-          nickname:   raw_info['nickname'],
-          sex:        raw_info['sex'],
-          province:   raw_info['province'],
-          city:       raw_info['city'],
-          country:    raw_info['country'],
-          image:      raw_info['headimgurl']
         }
       end
 
@@ -39,19 +32,19 @@ module OmniAuth
       # doc https://github.com/intridea/omniauth/wiki/Strategy-Contribution-Guide
       def request_phase
         params = client.auth_code.authorize_params.merge(redirect_uri: callback_url).merge(authorize_params)
-        params["appid"] = params.delete("client_id")
+        params['appid'] = params.delete('client_id')
         redirect client.authorize_url(params)
       end
 
       def raw_info
-        @uid ||= access_token["openid"]
+        @uid ||= access_token['openid']
         @raw_info ||= begin
           access_token.options[:mode] = :query
-          # access_token's scope is "snsapi_login" not snsapi_userinfo(fuck), when we want to get userinfo in the /sns/userinfo
-          if access_token["scope"] && access_token["scope"].include?("snsapi_login")
-            @raw_info = access_token.get("/sns/userinfo", :params => {"openid" => @uid}, parse: :json).parsed
+          # access_token's scope is 'snsapi_login' not snsapi_userinfo(fuck), when we want to get userinfo in the /sns/userinfo
+          if access_token['scope'] && access_token['scope'].include?('snsapi_login')
+            @raw_info = access_token.get('/sns/userinfo', :params => {'openid' => @uid}, parse: :json).parsed
           else
-            @raw_info = {"openid" => @uid }
+            @raw_info = {'openid' => @uid }
           end
         end
       end

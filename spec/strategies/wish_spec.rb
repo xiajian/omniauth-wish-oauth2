@@ -1,12 +1,12 @@
 require 'spec_helper'
 
-describe OmniAuth::Strategies::Weixin do
+describe OmniAuth::Strategies::Wish do
   let(:request) { double('Request', :params => {}, :cookies => {}, :env => {}, :scheme=>"http", :url=>"localhost") }
   let(:app) { ->{[200, {}, ["Hello."]]}}
   let(:client){OAuth2::Client.new('appid', 'secret')}
 
   subject do
-    OmniAuth::Strategies::Weixin.new(app, 'appid', 'secret', @options || {}).tap do |strategy|
+    OmniAuth::Strategies::Wish.new(app, 'appid', 'secret', @options || {}).tap do |strategy|
       allow(strategy).to receive(:request) {
         request
       }
@@ -23,11 +23,11 @@ describe OmniAuth::Strategies::Weixin do
 
   describe '#client_options' do
     specify 'has site' do
-      expect(subject.client.site).to eq('https://api.weixin.qq.com')
+      expect(subject.client.site).to eq('https://api.Wish.qq.com')
     end
 
     specify 'has authorize_url' do
-      expect(subject.client.options[:authorize_url]).to eq('https://open.weixin.qq.com/connect/qrconnect#wechat_redirect')
+      expect(subject.client.options[:authorize_url]).to eq('https://open.Wish.qq.com/connect/qrconnect#wechat_redirect')
     end
 
     specify 'has token_url' do
@@ -122,9 +122,6 @@ describe OmniAuth::Strategies::Weixin do
 
         expect(subject.raw_info).to eq(response_hash)
       end
-
     end
-
   end
-
 end

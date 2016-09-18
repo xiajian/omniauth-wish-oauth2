@@ -1,2 +1,3 @@
-require 'omniauth-Wish-oauth2'
+require 'omniauth-wish-oauth2'
+
 require 'rspec'
